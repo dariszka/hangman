@@ -18,19 +18,20 @@ def get_word():
     else:
         sys.exit("Error:", response.status_code, response.text) 
 
-def display_word(letters_array):
-    for letter in letters_array:
-        print('-', end=' ')
-    print('') #adds newline after word
+def display_word(current_guess, word_letters_array):
+    word = ''
+    for letter in word_letters_array:
+        if letter == current_guess:
+            word += letter + ' '
+        else:
+            word += '- '
+    print(word)
 
 def make_guess():
-    guessed_letters = []
-    guessed_letters = ''
     current_guess = input('Guess a letter: ') 
-    if current_guess.isalpha() ==True:
+    if current_guess.isalpha() == True:
         if len(current_guess) == 1:
-            guessed_letters += current_guess
-            return guessed_letters 
+            return current_guess
         else:
             print('Just one letter b.')
             make_guess()
@@ -38,18 +39,24 @@ def make_guess():
         print('Babez do you know what a letter is? Try again..')
         make_guess()
 
-def check_for_letter(current_guess, letters_array): 
-    for letter in letters_array:
-        if letter == current_guess:
-            print(letter, end=' ')
-        else:
-            print('-', end=' ')
-    print('')
+def check_for_letter(current_guess, word_letters_array):
+    if current_guess in word_letters_array:
+        display_word(current_guess, word_letters_array)
+        return True 
+    else:
+        return False # to remove tries later
+
+def play_game(word_letters_array):
+    guessed_letters_array = [] #to display guessed letters l8r
+    left_tries = 3
+    while left_tries > 0:
+        guessed_letter = make_guess()
+        guessed_letters_array += guessed_letter
+        check_for_letter(guessed_letter, word_letters_array)
+        left_tries -=1 
 
 if __name__ == '__main__':
     word, letters_array = get_word()
     print(word)
-    display_word(letters_array)
-    guessed_letter = make_guess()
-    check_for_letter(guessed_letter, letters_array)
-
+    display_word('', letters_array) 
+    play_game(letters_array)
