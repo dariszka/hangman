@@ -3,6 +3,7 @@ from curses.ascii import isalpha
 import requests
 import json
 import sys
+import random
 
 response = requests.get("https://random-word-api.herokuapp.com/word")
 
@@ -39,24 +40,26 @@ def make_guess():
         print('Babez do you know what a letter is? Try again..')
         make_guess()
 
-# def check_for_letter(current_guess, guessed_letters_array, word_letters_array):
-#     if current_guess in word_letters_array:
-#         display_word(guessed_letters_array, word_letters_array)
-#         return True 
-#     else:
-#         return False # to remove tries later
-
 def play_game(word_letters_array):
-    guessed_letters_array = [] #to display guessed letters l8r
+    guessed_letters = []
+    wrong_guessed_letters = '' 
     left_tries = 3
     while left_tries > 0:
-        guessed_letter = make_guess()
-        guessed_letters_array += guessed_letter
-        # check_for_letter(guessed_letter, guessed_letters_array, word_letters_array)
-        if guessed_letter in word_letters_array:
-            display_word(guessed_letters_array, word_letters_array)
-        else:
-            left_tries -=1 
+        current_guess = make_guess()
+        if current_guess in guessed_letters:
+            print('You already guessed that girlie.')
+        elif current_guess in wrong_guessed_letters:
+            print('You literally already tried that.')
+        else: 
+            guessed_letters += current_guess
+            if current_guess in word_letters_array:
+                display_word(guessed_letters, word_letters_array)
+            else:
+                left_tries -=1 
+                guessed_letters.remove(current_guess)
+                wrong_guessed_letters += current_guess + ' '
+                wrong_answer_templates = ['Not this time :/', 'Yeah no, not really', 'Sorry, try again', 'Good guess, but wrong']
+                print(f"{random.choice(wrong_answer_templates)}\nLetters tried: {wrong_guessed_letters}" )
 
 if __name__ == '__main__':
     word, letters_array = get_word()
