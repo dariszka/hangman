@@ -18,10 +18,10 @@ def get_word():
     else:
         sys.exit("Error:", response.status_code, response.text) 
 
-def display_word(current_guess, word_letters_array):
+def display_word(guessed_letters_array, word_letters_array):
     word = ''
     for letter in word_letters_array:
-        if letter == current_guess:
+        if letter in guessed_letters_array:
             word += letter + ' '
         else:
             word += '- '
@@ -39,12 +39,12 @@ def make_guess():
         print('Babez do you know what a letter is? Try again..')
         make_guess()
 
-def check_for_letter(current_guess, word_letters_array):
-    if current_guess in word_letters_array:
-        display_word(current_guess, word_letters_array)
-        return True 
-    else:
-        return False # to remove tries later
+# def check_for_letter(current_guess, guessed_letters_array, word_letters_array):
+#     if current_guess in word_letters_array:
+#         display_word(guessed_letters_array, word_letters_array)
+#         return True 
+#     else:
+#         return False # to remove tries later
 
 def play_game(word_letters_array):
     guessed_letters_array = [] #to display guessed letters l8r
@@ -52,11 +52,14 @@ def play_game(word_letters_array):
     while left_tries > 0:
         guessed_letter = make_guess()
         guessed_letters_array += guessed_letter
-        check_for_letter(guessed_letter, word_letters_array)
-        left_tries -=1 
+        # check_for_letter(guessed_letter, guessed_letters_array, word_letters_array)
+        if guessed_letter in word_letters_array:
+            display_word(guessed_letters_array, word_letters_array)
+        else:
+            left_tries -=1 
 
 if __name__ == '__main__':
     word, letters_array = get_word()
     print(word)
-    display_word('', letters_array) 
+    display_word([], letters_array) 
     play_game(letters_array)
