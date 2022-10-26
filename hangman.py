@@ -5,6 +5,7 @@ import json
 import sys
 import random
 
+
 response = requests.get("https://random-word-api.herokuapp.com/word")
 
 def get_word():
@@ -27,6 +28,8 @@ def display_word(guessed_letters_array, word_letters_array):
         else:
             word += '- '
     print(word)
+    word = word.replace(' ', '') #for evaluation of score
+    return word
 
 def make_guess():
     current_guess = input('Guess a letter: ') 
@@ -53,7 +56,10 @@ def play_game(word_letters_array):
         else: 
             guessed_letters += current_guess
             if current_guess in word_letters_array:
-                display_word(guessed_letters, word_letters_array)
+                current_state_of_word = display_word(guessed_letters, word_letters_array)
+                win = evaluate_win(current_state_of_word, word_letters_array)
+                if win:
+                    break
             else:
                 left_tries -=1 
                 guessed_letters.remove(current_guess)
@@ -61,8 +67,16 @@ def play_game(word_letters_array):
                 wrong_answer_templates = ['Not this time :/', 'Yeah no, not really', 'Sorry, try again', 'Good guess, but wrong']
                 print(f"{random.choice(wrong_answer_templates)}\nLetters tried: {wrong_guessed_letters}" )
 
+def evaluate_win(current, word):
+    goal = ''.join(word)
+    if current == goal:
+        print('OMG SLAY U WIN')
+        return True 
+
 if __name__ == '__main__':
     word, letters_array = get_word()
     print(word)
     display_word([], letters_array) 
     play_game(letters_array)
+
+
