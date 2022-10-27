@@ -1,10 +1,7 @@
-
-from curses.ascii import isalpha
 import requests
 import json
 import sys
 import random
-
 
 response = requests.get("https://random-word-api.herokuapp.com/word")
 
@@ -56,27 +53,22 @@ def play_game(word_letters_array):
         else: 
             guessed_letters += current_guess
             if current_guess in word_letters_array:
-                current_state_of_word = display_word(guessed_letters, word_letters_array)
-                win = evaluate_win(current_state_of_word, word_letters_array)
-                if win:
+                current_guess_progress = display_word(guessed_letters, word_letters_array)
+                if current_guess_progress == ''.join(word_letters_array):
+                    print('OMG SLAY U WIN')
                     break
             else:
                 left_tries -=1 
-                guessed_letters.remove(current_guess)
-                wrong_guessed_letters += current_guess + ' '
-                wrong_answer_templates = ['Not this time :/', 'Yeah no, not really', 'Sorry, try again', 'Good guess, but wrong']
-                print(f"{random.choice(wrong_answer_templates)}\nLetters tried: {wrong_guessed_letters}" )
-
-def evaluate_win(current, word):
-    goal = ''.join(word)
-    if current == goal:
-        print('OMG SLAY U WIN')
-        return True 
+                if left_tries == 0:
+                    print('Oh noo, looks like ur a lil looser baby. U can always try again doe.')
+                else: 
+                    guessed_letters.remove(current_guess)
+                    wrong_guessed_letters += current_guess + ' '
+                    wrong_answer_templates = ['Not this time :/', 'Yeah no, not really', 'Sorry, try again', 'Good guess, but wrong']
+                    print(f"{random.choice(wrong_answer_templates)}\nLetters tried: {wrong_guessed_letters}" )
 
 if __name__ == '__main__':
     word, letters_array = get_word()
     print(word)
     display_word([], letters_array) 
     play_game(letters_array)
-
-
