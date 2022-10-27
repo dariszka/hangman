@@ -48,7 +48,7 @@ def make_guess():
 def play_game(word_letters_array):
     guessed_letters = []
     wrong_guessed_letters = '' 
-    left_tries = 5
+    left_tries = 9
     while left_tries > 0:
         current_guess = make_guess()
         if len(current_guess) == 1:
@@ -66,13 +66,13 @@ def play_game(word_letters_array):
                 else:
                     left_tries -=1 
                     if left_tries == 0:
-                        print('Oh noo, looks like ur a lil looser baby. U can always try again doe.')
+                        print(f"Oh noo, looks like ur a lil looser baby. U can always try again doe.\nAnswer was '{''.join(word_letters_array)}'.")
                         break
                     else: 
                         guessed_letters.remove(current_guess)
                         wrong_guessed_letters += current_guess + ' '
                         wrong_answer_templates = ['Not this time :/', 'Yeah no, not really', 'Sorry, try again', 'Good guess, but wrong']
-                    print(f"{random.choice(wrong_answer_templates)}\nLetters tried: {wrong_guessed_letters}" )
+                    print(f"{random.choice(wrong_answer_templates)}\nLetters tried: {wrong_guessed_letters}")
         else:
             if current_guess == ''.join(word_letters_array):
                 print('OMG SLAY U WIN')
@@ -80,13 +80,12 @@ def play_game(word_letters_array):
             else:
                 left_tries -=1 
                 if left_tries == 0:
-                    print('Oh noo, looks like ur a lil looser baby. U can always try again doe.')
+                    print("Oh noo, looks like ur a lil looser baby. U can always try again doe.\nAnswer was '{''.join(word_letters_array)}'.")
                     break
                 else:
                     print("That's just completely wrong...")
 
 if __name__ == '__main__':
     word, letters_array = get_word()
-    print(word)
     display_word([], letters_array) 
     play_game(letters_array)
