@@ -35,10 +35,10 @@ def make_guess():
             return current_guess
         else:
             print('Just one letter b.')
-            make_guess()
+            return make_guess()
     else:
         print('Babez do you know what a letter is? Try again..')
-        make_guess()
+        return make_guess()
 
 def play_game(word_letters_array):
     guessed_letters = []
